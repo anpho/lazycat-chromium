@@ -1,0 +1,66 @@
+# This is a basic workflow to help you get started with Actions
+
+name: LoadAndPack
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # install nodejs
+      - uses: actions/setup-node@v3.9.1
+
+      # install jq
+      - name: get date as version
+        run: today=$(date +"%y.%-m.%-d")
+
+      # install docker CE
+      - uses: docker/setup-docker-action@v4.3.0
+      
+      # install lzc-cli
+      - name: install lzc-cli
+        run: npm install -g @lazycatcloud/lzc-cli
+      
+      # load msyh.ttc
+      - name: get font
+        run: |
+          mkdir -p ./content/fonts/
+          curl "https://github.com/fernvenue/microsoft-yahei/raw/refs/heads/master/msyh.ttc" -o ./content/fonts/msyh.ttc
+      # fetch new version
+      - name: copy-image
+        run: |
+          last_part=$(lzc-cli appstore copy-image lscr.io/linuxserver/chromium:latest | tail -n 1 | awk '{print $NF}')
+          echo "$last_part"
+          
+      # replace manifest
+      - name: place image
+        run: |
+          sed -i "s/##/$last_part/" lzc-manifest.yml
+          sed -i "s/^version: .*/version: $today/I" manifest.yml
+        
+      # build
+      - name: build
+        run: |
+          lzc-cli project build
+      
+      # upload
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          path: ./*.lpk
