@@ -27,10 +27,6 @@ jobs:
       # install nodejs
       - uses: actions/setup-node@v3.9.1
 
-      # install jq
-      - name: get date as version
-        run: today=$(date +"%y.%-m.%-d")
-
       # install docker CE
       - uses: docker/setup-docker-action@v4.3.0
       
@@ -42,16 +38,13 @@ jobs:
       - name: get font
         run: |
           mkdir -p ./content/fonts/
-          curl "https://github.com/fernvenue/microsoft-yahei/raw/refs/heads/master/msyh.ttc" -o ./content/fonts/msyh.ttc
-      # fetch new version
-      - name: copy-image
-        run: |
-          last_part=$(lzc-cli appstore copy-image lscr.io/linuxserver/chromium:latest | tail -n 1 | awk '{print $NF}')
-          echo "$last_part"
+          curl -L "https://github.com/fernvenue/microsoft-yahei/raw/refs/heads/master/msyh.ttc" -o ./content/fonts/msyh.ttc
           
       # replace manifest
-      - name: place image
+      - name: fetch image
         run: |
+          last_part=$(lzc-cli appstore copy-image lscr.io/linuxserver/chromium:latest | tail -n 1 | awk '{print $NF}')
+          today=$(date +"%y.%-m.%-d")
           sed -i "s/##/$last_part/" lzc-manifest.yml
           sed -i "s/^version: .*/version: $today/I" lzc-manifest.yml
         
