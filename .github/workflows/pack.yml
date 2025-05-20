@@ -5,7 +5,7 @@ name: LoadAndPack
 # Controls when the workflow will run
 on:
   schedule:
-    - cron: '0 0 */14 * *'  # 每 14 天执行一次 UTC 时间
+    - cron: '0 0 */31 * *'  # 每 14 天执行一次 UTC 时间
     
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
@@ -58,7 +58,7 @@ jobs:
           }
           last_part_escaped=$(escape_sed "$last_part")
           
-          today=$(date +"136.%y.%m")
+          today=$(date +"136.%Y.%-m")
           sed -i "s/##/$last_part_escaped/" lzc-manifest.yml
           sed -i "s/^version: .*/version: $today/I" lzc-manifest.yml
         
@@ -66,7 +66,7 @@ jobs:
       - name: build
         run: |
           lzc-cli project build
-          today=$(date +"136.%y.%m")
+          today=$(date +"136.%Y.%-m")
           lzc-cli appstore publish ./*.lpk -c "$today"
       
       # upload
