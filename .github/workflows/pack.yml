@@ -53,7 +53,7 @@ jobs:
       - name: place image
         run: |
           sed -i "s/##/$last_part/" lzc-manifest.yml
-          sed -i "s/^version: .*/version: $today/I" manifest.yml
+          sed -i "s/^version: .*/version: $today/I" lzc-manifest.yml
         
       # build
       - name: build
