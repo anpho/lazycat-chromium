@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-node@v3.9.1
 
       # install docker CE
-      - uses: docker/setup-docker-action@v4.3.0
+      # - uses: docker/setup-docker-action@v4.3.0
       
       # prepare lzc-cli and env
       - name: install lzc-cli etc.
@@ -37,7 +37,7 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           npm install -g @lazycatcloud/lzc-cli
-          apt install expect curl -y
+          sudo apt install expect curl -y
           chmod +x int.exp
           ./int.exp
       
