@@ -38,8 +38,7 @@ jobs:
         run: |
           npm install -g @lazycatcloud/lzc-cli
           sudo apt install expect curl -y
-          chmod +x int.exp
-          ./int.exp
+          expect -f ./int.exp
       
       # load msyh.ttc
       - name: get font
