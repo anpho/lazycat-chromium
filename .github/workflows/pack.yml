@@ -50,8 +50,13 @@ jobs:
       - name: fetch image
         run: |
           last_part=$(lzc-cli appstore copy-image linuxserver/chromium | tail -n 1 | awk '{print $NF}')
+          function escape_sed() {
+            echo "$1" | sed 's/[&/\]/\\&/g'
+          }
+          last_part_escaped=$(escape_sed "$last_part")
+          
           today=$(date +"%y.%-m.%-d")
-          sed -i "s/##/$last_part/" lzc-manifest.yml
+          sed -i "s/##/$last_part_escaped/" lzc-manifest.yml
           sed -i "s/^version: .*/version: $today/I" lzc-manifest.yml
         
       # build
