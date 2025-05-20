@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+
+set username $username
+set password $password
+set cmd "/usr/local/bin/lzc-cli"
+
+spawn $cmd  appstore login
+
+expect "请输入登录用户名"
+send "$username\r"
+
+expect "请输入登录密码"
+send "$password\r"
+
+interact

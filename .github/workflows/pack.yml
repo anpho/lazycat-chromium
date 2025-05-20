@@ -30,9 +30,16 @@ jobs:
       # install docker CE
       - uses: docker/setup-docker-action@v4.3.0
       
-      # install lzc-cli
-      - name: install lzc-cli
-        run: npm install -g @lazycatcloud/lzc-cli
+      # prepare lzc-cli and env
+      - name: install lzc-cli etc.
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+          npm install -g @lazycatcloud/lzc-cli
+          apt install expect curl -y
+          chmod +x int.exp
+          ./int.exp
       
       # load msyh.ttc
       - name: get font
@@ -43,7 +50,7 @@ jobs:
       # replace manifest
       - name: fetch image
         run: |
-          last_part=$(lzc-cli appstore copy-image lscr.io/linuxserver/chromium:latest | tail -n 1 | awk '{print $NF}')
+          last_part=$(lzc-cli appstore copy-image linuxserver/chromium | tail -n 1 | awk '{print $NF}')
           today=$(date +"%y.%-m.%-d")
           sed -i "s/##/$last_part/" lzc-manifest.yml
           sed -i "s/^version: .*/version: $today/I" lzc-manifest.yml
