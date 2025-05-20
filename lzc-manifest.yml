@@ -1,0 +1,28 @@
+lzc-sdk-version: 0.1
+name: Chromium
+package: anpho.lzcapp.chromium
+version: 136.0.7103
+description: Chromium Browser
+license: https://choosealicense.com/licenses/mit/
+homepage: https://hub.docker.com/r/linuxserver/chromium
+author: linuxserver
+application:
+  subdomain: chromium
+  gpu_accel: true
+  usb_accel: true
+  routes:
+    - /=http://chromium.anpho.lzcapp.chromium.lzcapp:3000
+services:
+  chromium:
+    image: ##
+    # registry.lazycat.cloud/anpho/linuxserver/chromium:bcef4612b637259f
+    # lscr.io/linuxserver/chromium:latest
+    binds:
+      - /lzcapp/var/config:/config
+      - /lzcapp/run/mnt/home:/config/Downloads
+      - /lzcapp/pkg/content/fonts:/usr/share/fonts
+    environment:
+      # - ENABLE_CJK_FONT=1
+      # - LANG=zh_CN.UTF-8
+      # - KEEP_APP_RUNNING=1
+      
