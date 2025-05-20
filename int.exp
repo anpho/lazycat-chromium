@@ -1,7 +1,7 @@
 #!/usr/bin/expect
 
-set username $username
-set password $password
+set username $USERNAME
+set password $PASSWORD
 set cmd "/usr/local/bin/lzc-cli"
 
 spawn $cmd  appstore login
