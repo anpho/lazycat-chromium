@@ -4,8 +4,8 @@ name: LoadAndPack
 
 # Controls when the workflow will run
 on:
-  schedule:
-    - cron: '0 0 */14 * *'  # 每 14 天执行一次 UTC 时间
+  #schedule:
+  #  - cron: '0 0 */14 * *'  # 每 14 天执行一次 UTC 时间
     
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
