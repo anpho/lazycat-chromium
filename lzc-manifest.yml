@@ -10,6 +10,7 @@ application:
   subdomain: chromium
   gpu_accel: true
   usb_accel: true
+  multi_instance: true
   routes:
     - /=http://chromium.anpho.lzcapp.chromium.lzcapp:3000
 services:
